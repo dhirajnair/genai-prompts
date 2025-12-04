@@ -1,13 +1,14 @@
-## 🔍 Comprehensive Python Code Review Prompt
+# 🔍 Comprehensive Python Code Review Prompt
 
-```markdown
-# Python Code Review & Analysis Request
+## Python Code Review & Analysis Request
 
 Please perform a comprehensive code review of the following Python file(s). Analyze the code across ALL categories below and provide a detailed report.
 
+---
+
 ## 📋 Analysis Categories
 
-### 1. **Syntax & Style Issues**
+### 1. Syntax & Style Issues
 - PEP 8 compliance (naming conventions, indentation, line length)
 - Proper use of Python idioms
 - Code formatting consistency
@@ -15,7 +16,7 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Docstring presence and quality
 - Type hints usage and correctness
 
-### 2. **Logic & Correctness**
+### 2. Logic & Correctness
 - Off-by-one errors
 - Incorrect boolean logic
 - Edge case handling (empty inputs, None values, boundary conditions)
@@ -26,7 +27,7 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Variable shadowing issues
 - Mutable default arguments
 
-### 3. **Security Vulnerabilities**
+### 3. Security Vulnerabilities
 - SQL injection risks
 - Command injection (subprocess, os.system)
 - Path traversal vulnerabilities
@@ -40,7 +41,7 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Use of eval(), exec(), compile() with user input
 - Prototype pollution / mass assignment
 
-### 4. **Performance Issues**
+### 4. Performance Issues
 - Inefficient algorithms (O(n²) when O(n) possible)
 - Unnecessary nested loops
 - Repeated expensive operations in loops
@@ -52,7 +53,7 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Redundant computations
 - Missing generator usage for large datasets
 
-### 5. **Concurrency & Multi-threading**
+### 5. Concurrency & Multi-threading
 - Race conditions
 - Deadlock potential
 - Missing locks/synchronization
@@ -64,14 +65,14 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Blocking calls in async code
 - Resource leaks in concurrent code
 
-### 6. **Memory Management**
+### 6. Memory Management
 - Memory leaks (circular references, unclosed resources)
 - Unbounded data structures
 - Missing context managers (with statements)
 - Large object retention
 - Inefficient copying of large objects
 
-### 7. **Error Handling**
+### 7. Error Handling
 - Bare except clauses
 - Swallowing exceptions silently
 - Too broad exception handling
@@ -79,7 +80,7 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Incorrect exception chaining
 - Custom exceptions without proper inheritance
 
-### 8. **Maintainability & Code Quality**
+### 8. Maintainability & Code Quality
 - Code duplication (DRY violations)
 - Functions/methods that are too long
 - High cyclomatic complexity
@@ -89,13 +90,13 @@ Please perform a comprehensive code review of the following Python file(s). Anal
 - Missing or outdated comments
 - Tightly coupled components
 
-### 9. **Testing & Reliability**
+### 9. Testing & Reliability
 - Untestable code patterns
 - Missing input validation
 - Assertions that could be bypassed
 - Non-deterministic behavior
 
-### 10. **Python-Specific Anti-patterns**
+### 10. Python-Specific Anti-patterns
 - Using `type()` instead of `isinstance()`
 - Using `==` for None/True/False instead of `is`
 - Not using enumerate() for index loops
@@ -118,6 +119,7 @@ For each issue found, provide:
 **Location:** Line X-Y (or function/class name)
 **Issue:** Clear description of the problem
 **Impact:** What could go wrong
+
 **Current Code:**
 ```python
 # problematic code snippet
@@ -136,6 +138,7 @@ For each issue found, provide:
 ## 📝 Summary Section
 
 After analysis, provide:
+
 1. **Total Issues Found** by severity
 2. **Top 3 Critical Issues** to address immediately
 3. **Overall Code Health Score** (1-10)
@@ -146,10 +149,11 @@ After analysis, provide:
 ## ✅ Confirmation & Fix Mode
 
 After reviewing the analysis:
-- Reply "FIX ALL" to apply all suggested fixes
-- Reply "FIX [issue numbers]" to fix specific issues (e.g., "FIX 1,3,5")
-- Reply "EXPLAIN [issue number]" for deeper explanation
-- Reply "SKIP [issue numbers]" to exclude from fixes
+
+- Reply **"FIX ALL"** to apply all suggested fixes
+- Reply **"FIX [issue numbers]"** to fix specific issues (e.g., "FIX 1,3,5")
+- Reply **"EXPLAIN [issue number]"** for deeper explanation
+- Reply **"SKIP [issue numbers]"** to exclude from fixes
 
 I will then provide the complete corrected code with all approved fixes applied.
 
@@ -157,23 +161,27 @@ I will then provide the complete corrected code with all approved fixes applied.
 
 ## 🎯 Code to Analyze
 
-[PASTE YOUR PYTHON CODE HERE OR PROVIDE FILE PATH]
+```python
+# [PASTE YOUR PYTHON CODE HERE OR PROVIDE FILE PATH]
+```
 
 ---
 
 ## 🔧 Additional Context (Optional)
 
-- **Python Version:** (e.g., 3.9, 3.11)
-- **Framework/Libraries:** (e.g., Django, FastAPI, asyncio)
-- **Deployment Environment:** (e.g., AWS Lambda, Docker, bare metal)
-- **Specific Concerns:** (any particular areas to focus on)
-```
+| Field | Value |
+|-------|-------|
+| **Python Version** | (e.g., 3.9, 3.11) |
+| **Framework/Libraries** | (e.g., Django, FastAPI, asyncio) |
+| **Deployment Environment** | (e.g., AWS Lambda, Docker, bare metal) |
+| **Specific Concerns** | (any particular areas to focus on) |
 
 ---
 
-### Usage Tips:
+## 💡 Usage Tips
 
 1. **For single files:** Paste the code directly after "Code to Analyze"
 2. **For multiple files:** List each file with its path and contents
 3. **Add context:** The more context you provide about the environment and purpose, the better the analysis
 4. **Iterative review:** After fixes, you can ask for a re-review to catch any new issues
+
