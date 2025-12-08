@@ -1,0 +1,173 @@
+# SkyPulse - Screens & UI
+
+## Screen List
+
+| Screen | URL | Purpose |
+|--------|-----|---------|
+| Landing/Search | `/` | Main entry - input object IDs |
+| Processing | `/processing` | Show query progress |
+| Results List | `/results` | List all processed objects |
+| Object Summary | `/object/:id` | Detailed view for single object |
+| Export | `/export` | Export options modal/page |
+
+---
+
+## Screen Details
+
+### Screen: Landing/Search
+- **Purpose**: Entry point for users to input astronomical object identifiers
+- **Components**:
+  - App header with logo "SkyPulse"
+  - Hero text: "Discover what's known about your objects"
+  - Large text area for pasting IDs
+  - File upload dropzone for CSV
+  - ID type auto-detect indicator
+  - "Lookup" primary action button
+  - Recent searches sidebar (if logged in - future)
+- **Actions**:
+  - Paste/type object IDs
+  - Upload CSV file
+  - Clear input
+  - Start lookup
+- **States**:
+  - Empty: Placeholder text with examples
+  - Has input: Show ID count and detected types
+  - Validation error: Highlight invalid IDs
+  - Loading: Disabled input, show spinner on button
+
+---
+
+### Screen: Processing
+- **Purpose**: Show real-time progress of database queries
+- **Components**:
+  - Overall progress bar (X of Y objects)
+  - Current object being processed
+  - Database query status list:
+    - SIMBAD: ✓ Complete / ⏳ Querying / ✗ Failed
+    - VizieR: ✓ Complete / ⏳ Querying / ✗ Failed
+    - NASA Exoplanet Archive: ...
+    - MAST: ...
+  - Live log of retrieved data
+  - Cancel button
+  - Estimated time remaining
+- **Actions**:
+  - Cancel processing
+  - View partial results (if available)
+- **States**:
+  - Processing: Animated progress
+  - Partial failure: Show which sources failed
+  - Complete: Auto-redirect to results
+
+---
+
+### Screen: Results List
+- **Purpose**: Overview of all processed objects
+- **Components**:
+  - Summary stats bar: "23 objects processed, 2 with warnings"
+  - Filter/sort controls (by name, type, status)
+  - Results table:
+    - Object ID / Name
+    - Type (Star, Exoplanet candidate, Variable, etc.)
+    - Key params (magnitude, distance)
+    - Data completeness indicator
+    - Status (complete, partial, failed)
+  - Bulk select checkboxes
+  - Export selected button
+  - Click row → navigate to Object Summary
+- **Actions**:
+  - Sort/filter results
+  - Select objects for bulk export
+  - Click to view object detail
+  - Export all
+- **States**:
+  - Loading: Skeleton rows
+  - Empty: "No objects processed yet"
+  - Has data: Populated table
+  - Selection mode: Checkboxes visible
+
+---
+
+### Screen: Object Summary
+- **Purpose**: Comprehensive view of single object with all gathered data
+- **Components**:
+  - **Header Section**:
+    - Primary name (largest text)
+    - Aliases/Cross-IDs as tags
+    - Object type badge
+    - Quick actions: Export, Copy ID, Share link
+  - **Coordinates Card**:
+    - RA / Dec display
+    - Mini sky map (Aladin Lite embed or static image)
+    - Constellation
+  - **Key Parameters Card**:
+    - Magnitude (with band)
+    - Spectral type
+    - Distance (pc/ly)
+    - Proper motion
+    - Effective temperature
+    - (Parameters vary by object type)
+  - **Classification Card**:
+    - Object type hierarchy
+    - Flags (variable, binary, exoplanet host, etc.)
+    - Confidence/source
+  - **Data Sources Card**:
+    - List of queried sources
+    - Status per source
+    - Links to original database pages
+  - **Summary Text**:
+    - Auto-generated paragraph summarizing the object
+  - **Raw Data Accordion**:
+    - Expandable JSON view of all retrieved data
+- **Actions**:
+  - Export as CSV/JSON/PDF
+  - Copy summary text
+  - Open in external database
+  - Navigate back to results
+- **States**:
+  - Loading: Skeleton cards
+  - Complete: All data shown
+  - Partial: Show available data, indicate missing sources
+  - Error: Show what failed and retry option
+
+---
+
+### Screen: Export Modal
+- **Purpose**: Configure and download exports
+- **Components**:
+  - Format selector: CSV, JSON, PDF
+  - Scope: Current object / Selected objects / All
+  - Field selector (which columns to include)
+  - Include raw data toggle
+  - Download button
+  - Copy to clipboard (for JSON)
+- **Actions**:
+  - Select format
+  - Configure fields
+  - Download
+  - Copy
+- **States**:
+  - Ready: Options available
+  - Generating: Progress indicator
+  - Complete: Download ready
+
+---
+
+## Design Direction
+
+- **Style**: Scientific/Professional but modern - clean data presentation
+- **Mood**: Trust, precision, clarity - like a well-designed research tool
+- **Colors**:
+  - Primary: Deep space blue (#0F172A or similar dark)
+  - Secondary: Cosmic purple accent (#7C3AED)
+  - Accent: Stellar gold for highlights (#F59E0B)
+  - Background: Dark mode default (easier on eyes for data work)
+  - Success/Error: Standard green/red
+- **Typography**:
+  - Headings: Space Grotesk or IBM Plex Sans (technical feel)
+  - Body: Inter or system fonts (readability)
+  - Data/Mono: JetBrains Mono (for IDs, coordinates)
+- **Special Elements**:
+  - Subtle star field or grid pattern in backgrounds
+  - Data cards with slight glow effect
+  - Progress animations with orbital/pulse motif
+

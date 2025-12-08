@@ -1,0 +1,97 @@
+# SkyPulse - Features & User Stories
+
+## MVP Features
+
+### Feature 1: Object Input
+- **Name**: Bulk Object ID Input
+- **Description**: Accept a list of astronomical object identifiers (Gaia IDs, TIC IDs, etc.) via text input or file upload
+- **User Story**: As a scientist, I want to input multiple object IDs at once so that I can quickly gather context for my entire dataset
+- **Acceptance Criteria**:
+  - Accept comma/newline separated IDs in text area
+  - Accept CSV file upload with ID column
+  - Auto-detect ID type (Gaia, TIC, etc.)
+  - Validate IDs before processing
+  - Support batch sizes up to 100 objects
+
+### Feature 2: Multi-Source Data Retrieval
+- **Name**: External Database Query Engine
+- **Description**: Query multiple astronomical databases and APIs to retrieve metadata for each object
+- **User Story**: As a scientist, I want the app to automatically query all relevant databases so that I don't have to manually search each source
+- **Acceptance Criteria**:
+  - Query SIMBAD for basic object info and cross-IDs
+  - Query VizieR for catalog data
+  - Query NASA Exoplanet Archive (for exoplanet candidates)
+  - Query MAST (for TESS/Kepler data)
+  - Handle API rate limits gracefully
+  - Show progress during retrieval
+
+### Feature 3: Data Consolidation
+- **Name**: Metadata Normalization
+- **Description**: Merge and normalize data from multiple sources into a unified structure
+- **User Story**: As a scientist, I want data from different sources merged intelligently so that I see one coherent view per object
+- **Acceptance Criteria**:
+  - Resolve conflicting values (e.g., different RA/Dec precision)
+  - Standardize units (magnitudes, coordinates, etc.)
+  - Flag data source for each parameter
+  - Handle missing data gracefully
+
+### Feature 4: Object Summary Page
+- **Name**: Integrated Object Summary
+- **Description**: Display a structured summary page for each object with text description and key parameters
+- **User Story**: As a scientist, I want a clear summary page per object so that I can quickly understand what's known about it
+- **Acceptance Criteria**:
+  - Show object name and all known aliases
+  - Display coordinates (RA, Dec) with sky map preview
+  - List key parameters (magnitude, spectral type, distance, etc.)
+  - Show object classification and flags
+  - Display data source citations
+  - Generate natural language summary paragraph
+
+### Feature 5: Results Export
+- **Name**: Export & Download
+- **Description**: Export consolidated results in various formats
+- **User Story**: As a scientist, I want to export the gathered data so that I can use it in my analysis pipeline
+- **Acceptance Criteria**:
+  - Export as CSV
+  - Export as JSON
+  - Export individual object summaries as PDF
+  - Bulk export all objects
+
+---
+
+## Future Features (Post-MVP)
+- Light curve visualization from TESS/Kepler
+- Integration with ADS for literature references
+- AI-generated scientific context paragraphs
+- Object comparison view
+- Saved searches and object collections
+- API access for pipeline integration
+- Custom database source configuration
+
+---
+
+## User Flows
+
+### Flow 1: Single Object Lookup
+1. User enters single object ID in search box
+2. System validates and detects ID type
+3. System queries external databases (shows progress)
+4. Summary page displays with all gathered data
+5. User can export or copy data
+
+### Flow 2: Batch Processing
+1. User uploads CSV or pastes multiple IDs
+2. System validates all IDs, shows any errors
+3. User confirms and starts batch processing
+4. Progress bar shows completion status
+5. Results list shows all processed objects
+6. User clicks any object to view summary
+7. User can bulk export all results
+
+### Flow 3: Review & Export
+1. User views object summary page
+2. User reviews key parameters and sources
+3. User clicks export button
+4. User selects format (CSV/JSON/PDF)
+5. Download initiates
+

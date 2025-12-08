@@ -1,0 +1,15 @@
+Our scientific pipelines process very large astronomical time-series datasets and identify objects of interest (stars, exoplanet candidates, variable sources, etc.). We now want to build an app "skypulse" , that automatically gathers background information about each object and produces an integrated summary.
+
+You can think of this as an intelligent “context engine” that helps scientists quickly understand what is already known about an object before performing deeper analysis.
+
+Specifically, this layer should be able to:
+
+
+Take as input a list of object identifiers (e.g., Gaia IDs, TIC IDs).
+
+Query multiple external data sources (such as public astronomical databases or APIs).
+
+Consolidate and normalize the retrieved metadata into a unified structure.
+
+Generate a structured summary page per object (text + key parameters).
+

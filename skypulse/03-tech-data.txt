@@ -1,0 +1,150 @@
+# SkyPulse - Tech & Data
+
+## Tech Stack
+
+| Layer | Choice | Why |
+|-------|--------|-----|
+| Frontend | **Next.js 14** (App Router) | SSR for SEO, React ecosystem, great DX |
+| Styling | **Tailwind CSS + shadcn/ui** | Rapid UI development, consistent design system |
+| Backend | **Next.js API Routes** | Unified codebase, serverless-ready |
+| Database | **PostgreSQL** (via Supabase or Neon) | Reliable, good for structured scientific data |
+| ORM | **Prisma** | Type-safe queries, easy migrations |
+| Async Jobs | **Inngest** or **BullMQ** | Handle long-running multi-source queries |
+| HTTP Client | **axios** or **ky** | API calls to external astronomical databases |
+| Auth | **NextAuth.js** (optional for MVP) | If saving searches needed |
+| Hosting | **Vercel** | Easy deployment, edge functions |
+| Sky Map | **Aladin Lite** (embed) | Interactive sky visualization |
+
+---
+
+## Data Model
+
+### Entity: QuerySession
+| Field | Type | Notes |
+|-------|------|-------|
+| id | UUID | Primary key |
+| created_at | DateTime | When query was initiated |
+| status | Enum | pending, processing, completed, failed |
+| input_ids | String[] | Original input object IDs |
+| total_objects | Int | Count of objects to process |
+| completed_objects | Int | Count processed so far |
+
+### Entity: AstronomicalObject
+| Field | Type | Notes |
+|-------|------|-------|
+| id | UUID | Primary key |
+| session_id | UUID | FK to QuerySession |
+| input_id | String | Original ID provided by user |
+| id_type | Enum | gaia, tic, simbad, other |
+| primary_name | String | Resolved primary name |
+| aliases | String[] | All known identifiers |
+| object_type | String | Star, Exoplanet, Variable, etc. |
+| ra | Float | Right Ascension (degrees) |
+| dec | Float | Declination (degrees) |
+| magnitude | Float | Primary magnitude |
+| magnitude_band | String | V, G, Tmag, etc. |
+| spectral_type | String | e.g., G2V |
+| distance_pc | Float | Distance in parsecs |
+| effective_temp | Float | Kelvin |
+| flags | String[] | variable, binary, exoplanet_host, etc. |
+| summary_text | Text | Generated summary paragraph |
+| raw_data | JSONB | All retrieved data from sources |
+| data_sources | JSONB | Which sources returned data |
+| status | Enum | pending, complete, partial, failed |
+| created_at | DateTime | |
+| updated_at | DateTime | |
+
+### Entity: DataSourceResult
+| Field | Type | Notes |
+|-------|------|-------|
+| id | UUID | Primary key |
+| object_id | UUID | FK to AstronomicalObject |
+| source_name | String | simbad, vizier, exoplanet_archive, mast |
+| status | Enum | success, failed, no_data |
+| response_data | JSONB | Raw response from source |
+| error_message | String | If failed |
+| queried_at | DateTime | |
+
+---
+
+## Relationships
+
+```
+QuerySession 1 ──── N AstronomicalObject
+AstronomicalObject 1 ──── N DataSourceResult
+```
+
+---
+
+## Key API Endpoints
+
+### Internal API (Next.js Routes)
+
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| POST | `/api/query/start` | Initiate new query session |
+| GET | `/api/query/:sessionId/status` | Get processing progress |
+| GET | `/api/query/:sessionId/results` | Get all results for session |
+| GET | `/api/object/:id` | Get single object details |
+| POST | `/api/export` | Generate export file |
+
+### External APIs (Data Sources)
+
+| Source | Base URL | Auth | Rate Limit |
+|--------|----------|------|------------|
+| **SIMBAD** | `https://simbad.u-strasbg.fr/simbad/sim-tap` | None | ~5 req/sec |
+| **VizieR** | `https://vizier.u-strasbg.fr/viz-bin/votable` | None | ~5 req/sec |
+| **NASA Exoplanet Archive** | `https://exoplanetarchive.ipac.caltech.edu/TAP` | None | Reasonable |
+| **MAST** | `https://mast.stsci.edu/api/v0` | API Key (free) | 10 req/sec |
+
+---
+
+## Query Flow Architecture
+
+```
+User Input
+    ↓
+[API: /api/query/start]
+    ↓
+Create QuerySession in DB
+    ↓
+Queue job for each object
+    ↓
+[Background Worker]
+    ├── Query SIMBAD (resolve name, get basic info)
+    ├── Query VizieR (catalog cross-match)
+    ├── Query NASA Exoplanet Archive
+    └── Query MAST (TESS/Kepler data)
+    ↓
+Consolidate & normalize data
+    ↓
+Generate summary text
+    ↓
+Save AstronomicalObject to DB
+    ↓
+Update QuerySession progress
+    ↓
+[Frontend polls /api/query/:id/status]
+    ↓
+Display results when complete
+```
+
+---
+
+## Environment Variables
+
+```env
+# Database
+DATABASE_URL=postgresql://...
+
+# External APIs (if needed)
+MAST_API_KEY=...
+
+# App
+NEXT_PUBLIC_APP_URL=https://skypulse.app
+
+# Optional Auth
+NEXTAUTH_SECRET=...
+NEXTAUTH_URL=...
+```
+

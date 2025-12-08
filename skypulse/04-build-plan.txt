@@ -1,0 +1,183 @@
+# SkyPulse - Build Plan
+
+## Phase Overview
+
+```
+Phase 1: Setup (Day 1)
+    ↓
+Phase 2: Core Backend (Days 2-4)
+    ↓
+Phase 3: Frontend UI (Days 5-7)
+    ↓
+Phase 4: Integration & Polish (Days 8-10)
+    ↓
+[MVP READY]
+```
+
+---
+
+## Phase 1: Setup (Day 1)
+
+- [ ] Initialize Next.js 14 project with App Router
+- [ ] Setup Tailwind CSS + shadcn/ui
+- [ ] Configure PostgreSQL database (Supabase/Neon)
+- [ ] Setup Prisma with initial schema
+- [ ] Create project structure:
+  ```
+  src/
+  ├── app/
+  │   ├── page.tsx (landing)
+  │   ├── results/page.tsx
+  │   ├── object/[id]/page.tsx
+  │   └── api/
+  ├── components/
+  │   ├── ui/ (shadcn)
+  │   └── features/
+  ├── lib/
+  │   ├── db.ts
+  │   ├── sources/ (API clients)
+  │   └── utils/
+  └── types/
+  ```
+- [ ] Deploy empty shell to Vercel
+- [ ] Setup environment variables
+
+---
+
+## Phase 2: Core Backend (Days 2-4)
+
+### Day 2: Database & ID Resolution
+- [ ] Create Prisma schema (QuerySession, AstronomicalObject, DataSourceResult)
+- [ ] Run initial migration
+- [ ] Build SIMBAD API client (`lib/sources/simbad.ts`)
+  - [ ] Query by Gaia ID
+  - [ ] Query by TIC ID
+  - [ ] Parse VOTable response
+- [ ] Test SIMBAD queries work
+
+### Day 3: Additional Data Sources
+- [ ] Build VizieR API client (`lib/sources/vizier.ts`)
+- [ ] Build NASA Exoplanet Archive client (`lib/sources/exoplanet-archive.ts`)
+- [ ] Build MAST API client (`lib/sources/mast.ts`)
+- [ ] Create unified query orchestrator (`lib/sources/orchestrator.ts`)
+
+### Day 4: API Routes & Data Consolidation
+- [ ] Implement `POST /api/query/start`
+- [ ] Implement `GET /api/query/:sessionId/status`
+- [ ] Implement `GET /api/query/:sessionId/results`
+- [ ] Implement `GET /api/object/:id`
+- [ ] Build data consolidation logic (merge multiple sources)
+- [ ] Build summary text generator
+
+---
+
+## Phase 3: Frontend UI (Days 5-7)
+
+### Day 5: Landing & Input
+- [ ] Build app layout with header
+- [ ] Create landing page with hero
+- [ ] Build ID input textarea component
+- [ ] Build CSV file upload component
+- [ ] Add ID validation and type detection
+- [ ] Connect to `/api/query/start`
+
+### Day 6: Processing & Results
+- [ ] Build processing page with progress UI
+- [ ] Implement polling for query status
+- [ ] Build results list page with table
+- [ ] Add sorting and filtering
+- [ ] Handle error states
+
+### Day 7: Object Summary Page
+- [ ] Build object summary page layout
+- [ ] Create header section with name/aliases
+- [ ] Create coordinates card (integrate Aladin Lite or static map)
+- [ ] Create key parameters card
+- [ ] Create classification card
+- [ ] Create data sources card
+- [ ] Build summary text section
+- [ ] Add raw data accordion
+
+---
+
+## Phase 4: Integration & Polish (Days 8-10)
+
+### Day 8: Export & Data Flow
+- [ ] Build export modal component
+- [ ] Implement CSV export
+- [ ] Implement JSON export
+- [ ] Test full flow: input → process → view → export
+- [ ] Fix any integration bugs
+
+### Day 9: Error Handling & Edge Cases
+- [ ] Handle API failures gracefully
+- [ ] Add retry logic for failed sources
+- [ ] Improve loading states
+- [ ] Add empty states
+- [ ] Handle partial data scenarios
+
+### Day 10: Polish & Deploy
+- [ ] Responsive design fixes
+- [ ] Add subtle animations
+- [ ] Performance check
+- [ ] Final testing with real astronomical objects
+- [ ] Production deployment
+- [ ] Test with sample datasets
+
+---
+
+## MVP Checklist
+
+### Must Work
+- [ ] User can paste 1-100 object IDs and click lookup
+- [ ] System queries SIMBAD successfully
+- [ ] System queries at least 2 other sources
+- [ ] Progress is shown during processing
+- [ ] Results list shows all processed objects
+- [ ] Object summary page displays:
+  - [ ] Name and aliases
+  - [ ] Coordinates
+  - [ ] At least 3 key parameters
+  - [ ] Object type
+  - [ ] Data sources used
+- [ ] User can export results as CSV
+- [ ] Errors are handled gracefully (no crashes)
+
+### Nice to Have (if time)
+- [ ] PDF export
+- [ ] Aladin Lite sky map embed
+- [ ] AI-generated summary paragraph
+- [ ] Copy to clipboard functionality
+
+---
+
+## Sample Test Objects
+
+Use these IDs for testing:
+```
+# Gaia IDs
+Gaia DR3 4111834567779557376
+Gaia DR3 2081900940499099136
+
+# TIC IDs  
+TIC 261136679
+TIC 307210830
+
+# SIMBAD names
+Proxima Centauri
+TRAPPIST-1
+HD 209458
+```
+
+---
+
+## Post-MVP Backlog
+
+1. User authentication & saved searches
+2. Light curve visualization
+3. Literature references (ADS integration)
+4. API endpoint for pipeline integration
+5. Custom data source configuration
+6. Object collections/favorites
+7. Comparison view (multiple objects side-by-side)
+
